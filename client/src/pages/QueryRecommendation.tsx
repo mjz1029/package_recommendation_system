@@ -7,25 +7,40 @@ import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Phone, MapPin, Zap, MessageSquare, Copy, Check, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 interface QueryRecommendationPageProps {
   sessionId?: string;
 }
 
 export default function QueryRecommendation({ sessionId = "" }: QueryRecommendationPageProps) {
+  const [location] = useLocation();
   const [phone, setPhone] = useState("");
   const [currentSessionId, setCurrentSessionId] = useState(sessionId);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  // 从 localStorage 读取 sessionId
+  // 从 localStorage 读取 sessionId 和从 URL 读取手机号
   useEffect(() => {
     const savedSessionId = localStorage.getItem("currentSessionId");
     if (savedSessionId && !sessionId) {
       setCurrentSessionId(savedSessionId);
     }
-  }, [sessionId]);
+
+    // 从 URL 参数读取手机号
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneFromUrl = urlParams.get("phone");
+    if (phoneFromUrl) {
+      setPhone(phoneFromUrl);
+      // 自动触发查询
+      if (savedSessionId) {
+        setIsLoading(true);
+        setTimeout(() => {
+          queryMutation.refetch().finally(() => setIsLoading(false));
+        }, 100);
+      }
+    }
+  }, [sessionId, location]);
 
   const queryMutation = trpc.recommend.queryByPhone.useQuery(
     { sessionId: currentSessionId, phone },

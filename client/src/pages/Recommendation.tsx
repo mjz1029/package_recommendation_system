@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
-import { Upload, Download, Search } from "lucide-react";
+import { Upload, Download, Search, Eye } from "lucide-react";
 
 interface RecommendationResult {
   phone: string;
@@ -35,6 +35,7 @@ interface RecommendationResult {
 }
 
 export default function Recommendation() {
+  const [, setLocation] = useLocation();
   const [file, setFile] = useState<File | null>(null);
   const [results, setResults] = useState<RecommendationResult[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -219,6 +220,10 @@ export default function Recommendation() {
     toast.success("导出成功");
   };
 
+  const handleViewDetail = (phone: string) => {
+    setLocation(`/query?phone=${phone}`);
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
@@ -329,6 +334,7 @@ export default function Recommendation() {
                       <TableHead className="bg-green-50">附加权益</TableHead>
                       <TableHead>推荐理由</TableHead>
                       <TableHead>资源风险</TableHead>
+                      <TableHead>操作</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -361,6 +367,17 @@ export default function Recommendation() {
                           >
                             {result.resourceRisk ? "是" : "否"}
                           </span>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewDetail(result.phone)}
+                            className="whitespace-nowrap"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            查看详情
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
