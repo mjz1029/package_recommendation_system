@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Phone, MapPin, Zap, MessageSquare, Copy, Check, ArrowLeft } from "lucide-react";
+import { AlertCircle, Phone, MapPin, Zap, MessageSquare, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useLocation } from "wouter";
 
 interface QueryRecommendationPageProps {
@@ -18,7 +17,6 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
   const [phone, setPhone] = useState("");
   const [currentSessionId, setCurrentSessionId] = useState(sessionId);
   const [isLoading, setIsLoading] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [isFromRecommendPage, setIsFromRecommendPage] = useState(false);
 
   // 从 localStorage 读取 sessionId 和从 URL 读取手机号
@@ -107,12 +105,6 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
     }
   };
 
-  const handleCopySpeech = (text: string, index: number) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
   const getPlanTypeLabel = (planType: string) => {
     const labels: Record<string, string> = {
       personal: "个人版",
@@ -179,7 +171,7 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
                 placeholder="请输入11位手机号（如13800138000）"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 className="flex-1 text-lg"
                 maxLength={11}
               />
