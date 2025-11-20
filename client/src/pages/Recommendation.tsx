@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,9 +41,24 @@ export default function Recommendation() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
+  // 页面加载时从 localStorage 恢复推荐结果
+  useEffect(() => {
+    const savedResults = localStorage.getItem("recommendationResults");
+    if (savedResults) {
+      try {
+        const parsedResults = JSON.parse(savedResults);
+        setResults(parsedResults);
+      } catch (error) {
+        console.error("Failed to parse saved results:", error);
+      }
+    }
+  }, []);
+
   const recommendMutation = trpc.recommend.batch.useMutation({
     onSuccess: (data) => {
       setResults(data.items);
+      // 保存推荐结果到 localStorage
+      localStorage.setItem("recommendationResults", JSON.stringify(data.items));
       // 保存 sessionId 到 localStorage
       localStorage.setItem("currentSessionId", data.sessionId);
       toast.success(`推荐完成，共${data.count}条记录。会话ID: ${data.sessionId.slice(0, 8)}...`);

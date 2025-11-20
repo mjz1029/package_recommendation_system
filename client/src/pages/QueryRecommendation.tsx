@@ -19,6 +19,7 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
   const [currentSessionId, setCurrentSessionId] = useState(sessionId);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [isFromRecommendPage, setIsFromRecommendPage] = useState(false);
 
   // 从 localStorage 读取 sessionId 和从 URL 读取手机号
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
     const phoneFromUrl = urlParams.get("phone");
     if (phoneFromUrl) {
       setPhone(phoneFromUrl);
+      setIsFromRecommendPage(true); // 标记为从推荐页面跳转过来
       // 自动触发查询
       if (savedSessionId) {
         setIsLoading(true);
@@ -139,12 +141,23 @@ export default function QueryRecommendation({ sessionId = "" }: QueryRecommendat
               <h1 className="text-3xl font-bold text-slate-900 mb-2">用户精准套餐推荐查询</h1>
               <p className="text-slate-600">输入手机号快速查询推荐套餐，支持多套餐推荐和AI话术生成</p>
             </div>
-            <Link href="/">
-              <Button variant="outline" size="lg">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                返回首页
-              </Button>
-            </Link>
+            <div className="flex gap-2">
+              {isFromRecommendPage ? (
+                <Link href="/recommend">
+                  <Button variant="outline" size="lg">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    返回推荐结果
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/">
+                  <Button variant="outline" size="lg">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    返回首页
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
