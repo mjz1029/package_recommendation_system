@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import PlanManagement from "./pages/PlanManagement";
 import Recommendation from "./pages/Recommendation";
+import QueryRecommendation from "./pages/QueryRecommendation";
 
 function Router() {
   return (
@@ -14,6 +15,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/plans"} component={PlanManagement} />
       <Route path={"/recommend"} component={Recommendation} />
+      <Route path={"/query"} component={() => <QueryRecommendation />} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

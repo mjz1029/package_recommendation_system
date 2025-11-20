@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, BarChart3, FileText } from "lucide-react";
+import { Package, BarChart3, FileText, Search } from "lucide-react";
 
 export default function Home() {
   return (
@@ -24,7 +24,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
           <Card>
             <CardHeader>
               <Package className="w-8 h-8 text-blue-600 mb-2" />
@@ -76,6 +76,24 @@ export default function Home() {
               </Button>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <Search className="w-8 h-8 text-orange-600 mb-2" />
+              <CardTitle>精准查询</CardTitle>
+              <CardDescription>单用户推荐查询</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                输入手机号快速查询用户的推荐套餐，支持多套餐推荐和AI话术生成
+              </p>
+              <Link href="/query">
+                <Button variant="outline" className="w-full">
+                  进入查询
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
 
         <Card className="bg-blue-50 border-blue-200">
@@ -88,14 +106,24 @@ export default function Home() {
               <ul className="text-sm text-muted-foreground space-y-1 ml-4">
                 <li>• 差值 ≤ 10：推荐相近档位套餐</li>
                 <li>• 差值 10-50：推荐高一档套餐</li>
-                <li>• 差值 {'>'}50：推荐低于ARPU三档套餐</li>
+                <li>• 差值 &gt;50：推荐低于ARPU三档套餐</li>
                 <li>• 优先匹配流量和通话资源充足的套餐</li>
+                <li>• 根据用户宽带需求推荐对应类型套餐（个人版/家庭版/全光版）</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Excel格式要求</h3>
               <p className="text-sm text-muted-foreground">
-                首行为表头：联系电话、归属地、主套餐、档位、流量饱和度、语音饱和度、近三个月ARPU、流量、通话、超套金额、超套比例、备注
+                首行为表头：联系电话、归属地、主套餐、档位、流量饱和度、语音饱和度、近三个月ARPU、流量、通话、超套金额、超套比例、是否有宽带、宽带速率、备注
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                其中"是否有宽带"填写：是/否，"宽带速率"填写：300/500/1000/2000（单位M）或留空
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">新增功能</h3>
+              <p className="text-sm text-muted-foreground">
+                支持基于手机号的精准查询、多套餐推荐（1-3个）、匹配度评分、AI推荐话术生成
               </p>
             </div>
           </CardContent>

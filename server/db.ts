@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, plans, InsertPlan, recommendations, InsertRecommendation } from "../drizzle/schema";
+import { InsertUser, users, plans, InsertPlan, recommendations, InsertRecommendation, userSessions, InsertUserSession } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -131,10 +131,55 @@ export async function getPlanById(id: number) {
 }
 
 /**
+ * 用户会话相关查询
+ */
+export async function createUserSession(data: InsertUserSession) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(userSessions).values(data);
+}
+
+export async function getUserSessionByPhone(phone: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(userSessions).where(eq(userSessions.phone, phone)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getUserSessionsBySessionId(sessionId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(userSessions).where(eq(userSessions.sessionId, sessionId));
+}
+
+export async function getUserSessionBySessionAndPhone(sessionId: string, phone: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(userSessions).where(
+    and(eq(userSessions.sessionId, sessionId), eq(userSessions.phone, phone))
+  ).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+/**
  * 推荐结果相关查询
  */
 export async function createRecommendation(data: InsertRecommendation) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return db.insert(recommendations).values(data);
+}
+
+export async function getRecommendationsByPhone(phone: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(recommendations).where(eq(recommendations.phone, phone));
+}
+
+export async function getRecommendationsBySessionAndPhone(sessionId: string, phone: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(recommendations).where(
+    and(eq(recommendations.sessionId, sessionId), eq(recommendations.phone, phone))
+  );
 }

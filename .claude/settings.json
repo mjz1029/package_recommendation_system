@@ -1,0 +1,8 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.gpt.ge",
+    "ANTHROPIC_AUTH_TOKEN": "sk-k27Bdiza0VyifZ4LEc694497A4Df4842AbF0Ca347eCbC454",
+    "ANTHROPIC_MODEL": "cc-sonnet-4-5-20250929",
+    "ANTHROPIC_SMALL_FAST_MODEL": "cc-sonnet-4-5-20250929"
+  }
+}
