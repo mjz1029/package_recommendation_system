@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1763541236156,
+      "tag": "0000_flowery_toxin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1763541288670,
+      "tag": "0001_futuristic_spencer_smythe",
+      "breakpoints": true
+    }
+  ]
+}
